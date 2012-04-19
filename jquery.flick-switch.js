@@ -39,7 +39,6 @@ jQuery.fn.flickSwitch = function(options) {
 		// insert into placeholder
 		jQuery(this).css("display", "none");
 		jQuery(this).wrap(jQuery(container).html(jQuery(image)));
-		console.log($(this).parent().parent());
 		$(this).parent().parent().mouseover(function(){
 			jQuery(this).css("cursor", settings.mouse_over);
 		});
