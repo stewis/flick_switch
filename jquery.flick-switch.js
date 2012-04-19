@@ -53,12 +53,14 @@ jQuery.fn.flickSwitch = function(options) {
 				jQuery(this).find('.flick_switch').animate({backgroundPosition: -53}, "slow", function() {
 					jQuery(this).attr('src', settings.switch_off_container_path);
 					jQuery("input", this).attr("checked", false);
+					jQuery("input", this).trigger("change");
 				});
 				state = 'off';
 			}
 			else {
 				jQuery(this).find('.flick_switch').animate({backgroundPosition: 0}, "slow", function() {
 					jQuery("input", this).attr("checked", true);
+					jQuery("input", this).trigger("change");
 				});
 				jQuery(this).find('.flick_switch').attr('src', settings.switch_on_container_path);
 				state = 'on';
