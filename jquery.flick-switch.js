@@ -34,7 +34,7 @@ jQuery.fn.flickSwitch = function(options) {
 		container = jQuery('<div class="flick_switch_container" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; position: relative; overflow: hidden"></div>');
 		
 		// make the switch image based on starting state
-		image = jQuery('<img class="flick_switch" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; background-image:url('+settings.switch_path+'); background-repeat:none; background-position:'+(state == 'on' ? 0 : -53)+'px" src="'+(state == 'on' ? settings.switch_on_container_path : settings.switch_off_container_path)+'" /></div>');
+		image = jQuery('<img class="flick_switch" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; background-image:url('+settings.switch_path+'); background-repeat:none; background-position:'+(state == 'on' ? 0 : (0 - (settings.switch_width/1.79)))+'px" src="'+(state == 'on' ? settings.switch_on_container_path : settings.switch_off_container_path)+'" /></div>');
 
 		// insert into placeholder
 		jQuery(this).css("display", "none");
@@ -50,7 +50,7 @@ jQuery.fn.flickSwitch = function(options) {
 		// click handling
 		$(this).parent().parent().click(function() {
 			if(state == 'on') {
-				jQuery(this).find('.flick_switch').animate({backgroundPosition: -53}, "slow", function() {
+				jQuery(this).find('.flick_switch').animate({backgroundPosition: (0 - (settings.switch_width/1.79))}, "slow", function() {
 					jQuery(this).attr('src', settings.switch_off_container_path);
 					jQuery("input", this).attr("checked", false);
 					jQuery("input", this).trigger("change");
