@@ -8,14 +8,17 @@
 jQuery.fn.flickSwitch = function(options) {
 	
 	var state = $(this).prop("checked") ? 'on' : 'off';
+	var offset = 1.83;
 	
 	// define default settings
 	var settings = {
 		mouse_over: 'pointer',
 		mouse_out:  'default',
-		switch_on_container_path: 'flick_switch_container_on.png',
-		switch_off_container_path: 'flick_switch_container_off.png',
-		switch_path: 'flick_switch.png',
+		switch_on_container: 'flick_switch_container_on.png',
+		switch_left_container: 'flick_switch_container_left.png',
+		switch_right_container: 'flick_switch_container_right.png',
+		switch_image: 'flick_switch.png',
+		image_path: 'img',
 		switch_height: 27,
 		switch_width: 94
 	};
@@ -27,45 +30,40 @@ jQuery.fn.flickSwitch = function(options) {
 	// create the switch
 	return this.each(function() {
 
-		var container;
-		var image;
-		
-		// make the container
-		container = jQuery('<div class="flick_switch_container" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; position: relative; overflow: hidden"></div>');
-		
-		// make the switch image based on starting state
-		image = jQuery('<img class="flick_switch" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; background-image:url('+settings.switch_path+'); background-repeat:none; background-position:'+(state == 'on' ? 0 : (0 - (settings.switch_width/1.79)))+'px" src="'+(state == 'on' ? settings.switch_on_container_path : settings.switch_off_container_path)+'" /></div>');
+		var container = '<div style="overflow: hidden; width: '+settings.switch_width+'px; height: '+settings.switch_height+'px; position: relative;"></div>';
+		var slider  = '<img class="flick_switch" style="position: absolute; left: ' + (state == 'on' ? 0 : (0 - (settings.switch_width / offset))) + ';  height: '+settings.switch_height+'px;" src="'+settings.image_path+'/'+settings.switch_image+'" /><img class="flick_left" style="position: absolute; left: 0px;  height: '+settings.switch_height+'px;" src="'+settings.image_path+'/'+ (state == 'on' ? settings.switch_on_container : settings.switch_left_container) +'" /><img style="position: absolute; right: 0px;  height: '+settings.switch_height+'px;" src="'+settings.image_path+'/flick_switch_container_right.png" />';
 
 		// insert into placeholder
-		jQuery(this).css("display", "none");
-		jQuery(this).wrap(jQuery(container).html(jQuery(image)));
-		$(this).parent().parent().mouseover(function(){
+		jQuery(this).css("display", "none");		
+		jQuery(this).wrap(jQuery(container).html(jQuery(slider)));
+		
+		$(this).parent().mouseover(function(){
 			jQuery(this).css("cursor", settings.mouse_over);
 		});
 
-		$(this).parent().parent().mouseout(function(){
+		$(this).parent().mouseout(function(){
 			jQuery(this).css("background", settings.mouse_out);
 		});
 
 		// click handling
-		$(this).parent().parent().click(function() {
-			if(state == 'on') {
-				jQuery(this).find('.flick_switch').animate({backgroundPosition: (0 - (settings.switch_width/1.79))}, "slow", function() {
-					jQuery(this).attr('src', settings.switch_off_container_path);
+		$(this).parent().click(function() {			
+			if(state == 'off') {
+				jQuery(this).animate({left: '0px'}, "slow", function() {
+					jQuery(this).parent().find('.flick_left').attr('src', settings.image_path+'/'+settings.switch_on_container);
+					jQuery("input", this).attr("checked", true);
+					jQuery("input", this).trigger("change");
+				});
+				state = 'on';
+			}
+			else {
+				jQuery(this).animate({left: (0 - (settings.switch_width / offset)) + 'px'}, "slow", function() {
+					jQuery(this).parent().find('.flick_left').attr('src', settings.image_path+'/'+settings.switch_left_container);
 					jQuery("input", this).attr("checked", false);
 					jQuery("input", this).trigger("change");
 				});
 				state = 'off';
 			}
-			else {
-				jQuery(this).find('.flick_switch').animate({backgroundPosition: 0}, "slow", function() {
-					jQuery("input", this).attr("checked", true);
-					jQuery("input", this).trigger("change");
-				});
-				jQuery(this).find('.flick_switch').attr('src', settings.switch_on_container_path);
-				state = 'on';
-			}
-		});		
+		});
 
 	});
 	
